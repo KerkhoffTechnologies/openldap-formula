@@ -6,9 +6,12 @@
         'server_pkg': 'openldap',
         'service': 'slapd',
         'su_group': 'root',
+    	  'olc': False,
+      	'olc_dn': 'olcDatabase={0}config,cn=config',
     },
     'Debian': {
-        'client_config': '/etc/ldap.conf',
+        'olc': True,
+      	'client_config': '/etc/ldap.conf',
         'client_pkg': 'ldap-utils',
         'server_config': '/etc/ldap/slapd.conf',
         'server_pkg': 'slapd',
@@ -27,6 +30,7 @@
             ],
         'slapd_pidfile': '/var/run/slapd/slapd.pid',
         'su_group': 'root',
+        'python_ldap_package': 'python-ldap',
     },
     'FreeBSD': {
         'client_config': '/usr/local/etc/openldap/ldap.conf',
