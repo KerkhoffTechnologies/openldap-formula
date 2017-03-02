@@ -32,6 +32,10 @@ openldap_formula_olc_auth:
         - replace:
             olcServerID: "{{ server_id }}"
             olcRootPW: "{{ rootpw }}"
+      - "cn=module,cn=config":
+        - replace:
+            olcServerID: "{{ server_id }}"
+            olcRootPW: "{{ rootpw }}"
 
 {% endif %}
   service.running:
