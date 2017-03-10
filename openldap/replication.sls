@@ -1,5 +1,5 @@
 {% from 'openldap/map.jinja' import openldap with context %}
-{% set server_id = salt['grains.get']('ldap:server:id'', 0) %}
+{% set server_id = salt['grains.get']('ldap:server:id', 0) %}
 
 {% if server_id == 0 %}
 fail-no-server-id:
@@ -23,19 +23,19 @@ openldap_formula_olc_auth:
     - entries:
       - "olcDatabase={0}config,cn=config":
         - default:
-            olcRootDN: "{{ olc_rootdn }}"
+            olcRootDN: "{{ openldap.olc_rootdn }}"
         {% if olc_rootpw %}
         - replace:
-            olcRootPW: "{{ olc_rootpw }}"
+            olcRootPW: "{{ openldap.olc_rootpw }}"
         {% endif %}
       - "cn=config":
         - replace:
-            olcServerID: "{{ server_id }}"
-            olcRootPW: "{{ rootpw }}"
+            olcServerID: "{{ openldap.server_id }}"
+            olcRootPW: "{{ openldap.rootpw }}"
       - "cn=module,cn=config":
         - replace:
-            olcServerID: "{{ server_id }}"
-            olcRootPW: "{{ rootpw }}"
+            olcServerID: "{{ openldap.server_id }}"
+            olcRootPW: "{{ openldap.rootpw }}"
 
 {% endif %}
   service.running:

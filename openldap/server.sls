@@ -1,8 +1,8 @@
 {% from 'openldap/map.jinja' import openldap with context %}
-{% set olc_rootdn=salt['pillar.get']('openldap:olc_rootdn', None) %}
-{% set olc_rootpw=salt['pillar.get']('openldap:olc_rootpw', None) %}
-{% set rootdn=salt['pillar.get']('openldap:rootdn', None) %}
-{% set rootpw=salt['pillar.get']('openldap:rootpw', None) %}
+{% set olc_rootdn=salt['pillar.get']('openldap:lookup:olc_rootdn', None) %}
+{% set olc_rootpw=salt['pillar.get']('openldap:lookup:olc_rootpw', None) %}
+{% set rootdn=salt['pillar.get']('openldap:lookup:rootdn', None) %}
+{% set rootpw=salt['pillar.get']('openldap:lookup:rootpw', None) %}
 
 python-ldap:
   pkg.installed:
