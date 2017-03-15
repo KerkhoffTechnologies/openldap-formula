@@ -3,3 +3,34 @@ openldap:
     rootpw: '{SSHA}5++yqs7UNz22kAYf7jboAmklhavVXahK'
     base: 'dc=example,dc=com'
     uri: ldap://ldap.example.com
+
+
+{# Customer specific content - goes into pillar/roles/customer/ldap.sls #}
+#!yamlex
+openldap: !aggregate
+    lookup:
+      rootdn: 'cn=admin,dc=mydomain,dc=local'
+      rootpw: '{SSHA}5++yqs7UNz22kAYf7jboAmklhavVXahK'
+      olc_rootdn: 'cn=admin,cn=config'
+      olc_rootpw: '{SSHA}5++yqs7UNz22kAYf7jboAmklhavVXahK'
+      base: 'dc=mydomain,dc=local'
+      uri: ldap://ldap.mydomain.local
+      olcServerID:
+        - "1 ldap://10.127.9.41/"
+        - "2 ldap://10.127.9.42/"
+      config_olcSyncRepl:
+        - '{0}rid=001 provider=ldap://10.127.9.41/ binddn="cn=admin,cn=config" bindmethod=simple credentials="clear-text-secret" searchbase="cn=config" type=refreshAndPersist retry="5 5 300 5" timeout=1'
+        - '{1}rid=002 provider=ldap://10.127.9.42/ binddn="cn=admin,cn=config" bindmethod=simple credentials="clear-text-secret" searchbase="cn=config" type=refreshAndPersist retry="5 5 300 5" timeout=1'
+      mdb_olcSyncRepl:
+        - '{0}rid=011 provider=ldap://10.127.9.41/ binddn="cn=admin,dc=mydomain,dc=local" bindmethod=simple credentials="clear-text-secret" searchbase="dc=mydomain,dc=local" type=refreshAndPersist retry="5 5 300 5" timeout=1'
+        - '{1}rid=012 provider=ldap://10.127.9.42/ binddn="cn=admin,dc=mydomain,dc=local" bindmethod=simple credentials="clear-text-secret" searchbase="dc=mydomain,dc=local" type=refreshAndPersist retry="5 5 300 5" timeout=1'
+
+{# /srv/saltstack/pillar/roles/openldap/replication/init.sls #}
+#!yamlex
+#include:
+
+states: !aggregate
+  default: !aggregate
+    - openldap.server
+    - openldap.replication
+
